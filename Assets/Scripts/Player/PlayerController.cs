@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     private Material mat;
 
     public Shader shader;
+    [SerializeField] private DissolveObject dissolveObj;
     private void Awake()
     {
         if (Instance == null)
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour
  
         body = this.GetComponent<Rigidbody>();
         mat = GetComponent<MeshRenderer>().material;
+        dissolveObj = GetComponent<DissolveObject>();
 
         cam = Camera.main;
         power = new InvisiblePower(20);
@@ -41,8 +43,6 @@ public class PlayerController : MonoBehaviour
         if(mat != null)
         {
             Debug.Log(mat.name);
-           
-
         }
        
     }
@@ -67,7 +67,6 @@ public class PlayerController : MonoBehaviour
 
             if (!IsSolid)
             {
-                 Debug.Log("Time left "+ power.MakeInivisble());
                 var timeLeft = power.MakeInivisble();
                 if(timeLeft <= 10.0f)
                 {
@@ -110,5 +109,11 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(2f);
         Instantiate(DeathEffect, this.transform.position, Quaternion.identity);
         this.gameObject.SetActive(false);
+    }
+
+    public IEnumerator DissolvePlayer()
+    {
+        yield return new WaitForSeconds(1f);
+        dissolveObj.isDissolve = !dissolveObj.isDissolve;
     }
 }
